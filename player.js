@@ -6,7 +6,9 @@ class Player {
   }
 
   continueWar = () => {
-    this.currentCards.push(this.pile.shift(), this.pile.shift());
+    for (let i = 1; i <= 4; i++) {
+        this.currentCards.push(this.pile.shift());
+    }
   };
 
   deckSize = () => {
@@ -15,6 +17,19 @@ class Player {
 
   removeTopCard = () => {
     return this.pile.shift();
+  };
+
+  // Takes both piles after wining war
+  winCurrentWar = (myCards, oppenentsCards) => {
+    this.pile.push(...myCards, ...oppenentsCards);
+  };
+
+  lengthOfCurrCards = () => {
+    return this.currentCards.length;
+  };
+
+  topCurrentCard = () => {
+    return this.currentCards[this.currentCards.length - 1];
   };
 }
 
