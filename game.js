@@ -5,6 +5,7 @@ import Rules from "./rules.js";
 
 class Game {
   constructor() {
+    this.winner = null;
     this.playerOne = new Player();
     this.playerTwo = new Player();
     this.generateDeck();
@@ -12,6 +13,7 @@ class Game {
   }
 
   generateDeck = () => {
+    // pretty inefficient
     const used = {};
     const playerOneCards = [];
     const playerTwoCards = [];
@@ -40,39 +42,39 @@ class Game {
   };
 
   startGame = () => {
-    while (this.playerOne.deckSize() > 0 && this.playerTwo.deckSize() > 0) {
-      console.log(this.playerOne.deckSize(), this.playerTwo.deckSize());
+    while (!this.winner) {
       this.playerOne.currentCards.push(this.playerOne.removeTopCard()); // Push these cards into player's current pile
       this.playerTwo.currentCards.push(this.playerTwo.removeTopCard());
       // As long as the compared cards are the same, we will keep adding and checking.
-      console.log(
-        this.playerOne.topCurrentCard(),
-        this.playerTwo.topCurrentCard()
-      );
+
       let resultOfComparison = Rules.compareCards(
         this.playerOne.topCurrentCard(),
         this.playerTwo.topCurrentCard()
       );
 
-      // If card's rank are the same, start war
-      while (
-        resultOfComparison === 0 &&
-        this.playerOne.deckSize() > 0 &&
-        this.playerTwo.deckSize() > 0
-      ) {
-        this.playerOne.continueWar();
-        this.playerTwo.continueWar();
+      // If card's rank are the same, start war, PROBLEM IS HERE
+      while (resultOfComparison === 0) {
+        // continue the war
+        if (!this.playerOne.continueWar()) {
+          this.playerTwo.winCurrentWar();
+          this.winner = this.playerTwo;
+          break;
+        }
+        if (!this.playerTwo.continueWar()) {
+          this.playerOne.winCurrentWar();
+          this.winner = this.playerOne;
+          break;
+        }
         resultOfComparison = Rules.compareCards(
           this.playerOne.topCurrentCard(),
           this.playerTwo.topCurrentCard()
         );
       }
-      if (this.playerOne.deckSize() === 0 || this.playerTwo.deckSize() === 0)
-        break;
 
-      console.log(resultOfComparison);
-      // Place loser's cards into winner's deck
+      if (this.winner) break;
+
       if (resultOfComparison === 1) {
+        // Place loser's cards into winner's deck
         this.playerOne.winCurrentWar(
           this.playerOne.currentCards,
           this.playerTwo.currentCards
@@ -87,14 +89,6 @@ class Game {
       // Reset both player's current cards in the pot
       this.playerOne.currentCards = [];
       this.playerTwo.currentCards = [];
-
-      // Determines if there is a winner at end of each card draw. Winning condition
-    }
-
-    if (this.playerOne.deckSize() === 0) {
-      this.playerTwo.wonGame = true;
-    } else if (this.playerTwo.deckSize() === 0) {
-      this.playerOne.wonGame = true;
     }
   };
 

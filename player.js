@@ -7,8 +7,14 @@ class Player {
 
   continueWar = () => {
     for (let i = 1; i <= 4; i++) {
-        this.currentCards.push(this.pile.shift());
+      const picked = this.pile.shift();
+      if (picked !== undefined) {
+        this.currentCards.push(picked);
+      } else {
+        return false;
+      }
     }
+    return true;
   };
 
   deckSize = () => {
