@@ -1,5 +1,6 @@
 import Game from "./game.js";
 import * as rl from "readline";
+import Player from "./player.js";
 
 const readline = rl.createInterface({
   input: process.stdin,
@@ -12,8 +13,7 @@ readline.question(`Hey, Whats your name? `, (name) => {
     (input) => {
       if (input.trim().toLowerCase() === "y") {
         console.log("Lets Go!");
-        const newGame = new Game();
-        newGame.showWinner();
+        const newGame = new Game(new Player(name));
         readline.close();
       } else {
         console.log("Maybe next time then!");

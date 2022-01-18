@@ -1,5 +1,6 @@
 class Player {
-  constructor(deck = []) {
+  constructor(name = `Computer`, deck = []) {
+    this.name = name;
     this.pile = deck;
     this.wonGame = false;
     this.currentCards = [];
@@ -28,6 +29,7 @@ class Player {
   // Takes both piles after wining war
   winCurrentWar = (myCards, oppenentsCards) => {
     this.pile.push(...myCards, ...oppenentsCards);
+    this.pile.sort(() => Math.random() - 0.5);
   };
 
   lengthOfCurrCards = () => {
@@ -36,6 +38,11 @@ class Player {
 
   topCurrentCard = () => {
     return this.currentCards[this.currentCards.length - 1];
+  };
+
+  emptyCurrentCards = () => {
+    this.currentCards = [];
+    return true;
   };
 }
 

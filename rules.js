@@ -18,6 +18,7 @@ class Rules {
   ];
 
   static compareCards = (pOneCard, pTwoCard) => {
+    console.log(pOneCard, pTwoCard);
     const playerOneCardIndex = Rules.ranks.indexOf(pOneCard.rank);
     const playerTwoCardIndex = Rules.ranks.indexOf(pTwoCard.rank);
     if (playerOneCardIndex > playerTwoCardIndex) {
